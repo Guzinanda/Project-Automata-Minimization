@@ -54,14 +54,6 @@ print(twe)
 nfa = twe
 
 
-
-
-
-
-
-
-
-
 # estados_afd = ['A','AB','ABC','ABD']
 estados_afd = []
 
