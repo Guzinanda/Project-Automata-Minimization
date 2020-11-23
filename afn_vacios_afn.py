@@ -19,10 +19,12 @@ def quitar_vacios(nfa):
        adelita_sensual = 0
        for estados in nfa.keys():
               for transiciones in nfa[estados].keys():
-                     if nfa[estados][transiciones] == ['']:
+                     if nfa[estados][transiciones] == ['']:                     
                             adelita_sensual = 1 
                             nfa[estados][transiciones] = 'N'  
        if adelita_sensual == 1:
               nfa['N'] = {}
               nfa['N']['0'] = 'N'  
               nfa['N']['1'] = 'N'  
+			  
+       return nfa

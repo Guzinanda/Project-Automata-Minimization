@@ -1,6 +1,3 @@
-#####################################################################################################################################
-# CONVERTIDOR DE AFND a AFD 
-#####################################################################################################################################
 
 #? El usuario determina el NFA ______________________________________________________________________________________________________
 
@@ -23,7 +20,9 @@
 
 
 #TODO Ejemplo 02: Con transiciones vacias pero sin epsilons
+
 #Input:
+"""
 nfa = {'A'    :{'0':['E'],           '1':['B','C']}, 
        'B'    :{'0':[''],            '1':['A']}, 
        'C'    :{'0':[''],            '1':['D']}, 
@@ -32,6 +31,8 @@ nfa = {'A'    :{'0':['E'],           '1':['B','C']},
 
 estado_inicial = 'A'
 estado_aceptacion = 'E' 
+"""
+
 dfa = {}
 
 #Output:
@@ -66,11 +67,12 @@ dfa = {}
 #? Algoritmos para limpiar el automata de vacios y epsilons _________________________________________________________________________
 # Limpia el nfa de estados vacios:
 import afn_vacios_afn as limpiar
-limpiar.quitar_vacios(nfa)
-
+import formatear_output as formatear
 
 #? Algoritmo que encuentra las trandisiones de los estados __________________________________________________________________________
-def encontrar_transiciones(estado_inicial):
+def encontrar_transiciones(nfa, estado_inicial, estado_final):
+
+       limpiar.quitar_vacios(nfa)
 
        # estados_afd = ['A']
        estados_afd = [estado_inicial]
@@ -131,7 +133,7 @@ def encontrar_transiciones(estado_inicial):
 
 
                             # 07. Imprime el estado que se ingresó y a los estados a los que llega con transicion 0 y 1:
-                            print(f'Transiciones de {sta}:  \t0:{lista0s}  \t1:{lista1s}')
+                            # print(f'Transiciones de {sta}:  \t0:{lista0s}  \t1:{lista1s}')
 
 
                             # 07. Guarda los datos en un diccionario dfa{}:
@@ -163,8 +165,11 @@ def encontrar_transiciones(estado_inicial):
                      else:
                             no_terminado = False
 
+       dfa_formateado = formatear.formatear_output(dfa)
 
-import formatear_output as formatear
+       return dfa_formateado
+
+
 
 
 
@@ -172,10 +177,4 @@ import formatear_output as formatear
 
 #? TEST _____________________________________________________________________________________________________________________________
 
-print('\n')
-encontrar_transiciones('A')
-
-print('\n')
-print(formatear.formatear_output(dfa))
-
-
+#encontrar_transiciones('A')
