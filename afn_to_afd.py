@@ -63,13 +63,10 @@ dfa = {}
 
 
 
-<<<<<<< HEAD
 #? Algoritmos para limpiar el automata de vacios y epsilons _________________________________________________________________________
 # Limpia el nfa de estados vacios:
 import afn_vacios_afn as limpiar
 limpiar.quitar_vacios(nfa)
-
-# Limpia el nfa de epsilons:
 
 
 #? Algoritmo que encuentra las trandisiones de los estados __________________________________________________________________________
@@ -83,31 +80,6 @@ def encontrar_transiciones(estado_inicial):
        no_terminado = True
 
        while no_terminado:
-=======
-#? Algoritmos para limpiar el automata de vacios y epsilons ______________________________________________________________________
-
-# Limpia el nfa de estados vacios
-import afn_vacios_afn as limpiar
-limpiar.quitar_vacios(nfa)
-
-
-
-#? Algoritmo que encuentra las trandisiones de los estados _______________________________________________________________________
-
-# estados_afd = ['A']
-estados_afd = [estado_inicial]
-
-# Estados ya validados
-validados = []
-
-# Encuentra estados
-romper = bool
-def encontrar_transiciones(estado_inicial):
-
-       no_romper = True
-
-       while no_romper:
->>>>>>> 313a7e73ec22d50e3d1fc6658612fbaaf8282fca
               for sta in estados_afd:
 
                      # 01. Va a revisar los estados que vayan entrando en esyados_afd y si no estan validados: e.g. 'A'
@@ -158,32 +130,17 @@ def encontrar_transiciones(estado_inicial):
                             sta = ''.join(sta)
 
 
-<<<<<<< HEAD
-                            
-
-
-
-
-
-
-=======
->>>>>>> 313a7e73ec22d50e3d1fc6658612fbaaf8282fca
                             # 07. Imprime el estado que se ingresó y a los estados a los que llega con transicion 0 y 1:
                             print(f'Transiciones de {sta}:  \t0:{lista0s}  \t1:{lista1s}')
 
 
-                            # 08. Guarda los datos en un diccionario dfa{}:
+                            # 07. Guarda los datos en un diccionario dfa{}:
                             
                             #dfa = {'A'   : {'0':['E'],    '1':['BC']},
                             #       'BC'  : {'0':['E'],    '1':['AD']}, 
                             #       'AD'  : {'0':['AE'],   '1':['BC']}, 
                             #       'E'   : {'0':['N'],    '1':['N']}, 
                             #       'AE'  : {'0':['E'],    '1':['BC']}}     
-
-                            #dfa = {'s1'  : {'0':'s1',     '1':'s2'},
-                            #       's2'  : {'0':'s3',     '1':'s2'},
-                            #       's3'  : {'0':'s3',     '1':'s4'},
-                            #       's4'  : {'0':'s3',     '1':'s2'}}                          
 
                             dfa[sta] = {'0':lista0s, '1':lista1s}
 
@@ -204,30 +161,13 @@ def encontrar_transiciones(estado_inicial):
                             validados.append(sta)
                      
                      else:
-<<<<<<< HEAD
                             no_terminado = False
 
 
-
-#? Algoritmo que formatea output a programa de Lalo _________________________________________________________________________________
-def formatear_output(dfa):
-       
-       cambios = {'A':'s0','B':'s1','C':'s2','D':'s3','E':'s4'}
+import formatear_output as formatear
 
 
-#Input:
-#dfa = {'A'   : {'0':'E'  ,   '1':'BC'},
-#       'BC'  : {'0':'E'  ,   '1':'AD'}, 
-#       'AD'  : {'0':'AE' ,   '1':'BC'}, 
-#       'E'   : {'0':'N'  ,   '1':'N'}, 
-#       'AE'  : {'0':'E'  ,   '1':'BC'}}
 
-#Output:
-#dfa = {'s0'   : {'0':'s4'   ,  '1':'s1s2'},
-#       's1s2' : {'0':'s4'   ,  '1':'s0s3'}, 
-#       's0s3' : {'0':'s0s4' ,  '1':'s1s2'}, 
-#       's4'   : {'0':'N'    ,  '1':'N'}, 
-#       's0s4' : {'0':'s4'   ,  '1':'s1s2'}}
 
 
 #? TEST _____________________________________________________________________________________________________________________________
@@ -236,17 +176,6 @@ print('\n')
 encontrar_transiciones('A')
 
 print('\n')
-print(dfa)
-=======
-                            no_romper = False
+print(formatear.formatear_output(dfa))
 
-
-
-#? TEST _________________________________________________________________________________________________________________________________
-
-print('\n')
-
-encontrar_transiciones('A')
-print('\n')
->>>>>>> 313a7e73ec22d50e3d1fc6658612fbaaf8282fca
 
