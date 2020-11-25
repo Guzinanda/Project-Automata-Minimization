@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+
 import afn_to_afd
 import afn_epsilon_afn
 import afd_minimization
@@ -15,15 +16,15 @@ class MainWindow:
         self.etiqueta_encabezado.pack()
         self.etiqueta_indicaciones = Label(master, text="Favor de indicar el automata a minimizar, solamente se aceptan automatas que reconocen el alfabeto {0, 1}")
         self.etiqueta_indicaciones.pack()
-
 """
 
-#Definición de variables
-eje_x = 250 #Valor inicial en x (Donde se imprime el 0 del encabezado)
-eje_y = 70  #Valor inicial en y (Donde se imprime el 0 del encabezado)
+# Definición de variables ______________________________________________________________________________________________________________________________________________
+eje_x = 330 #Valor inicial en x (Donde se imprime el 0 del encabezado)
+eje_y = 75  #Valor inicial en y (Donde se imprime el 0 del encabezado)
+
 eje_y_inicial = eje_y   #Copia el valor inicial en y para en el caso de necesitar transiciones epsilon
-separacion_x = 60   #Número de pixeles de separación entre elementos sobre el eje x
-separacion_y = 20   #Número de pixeles de separación entre elementos sobre el eje y
+separacion_x = 75   #Número de pixeles de separación entre elementos sobre el eje x
+separacion_y = 30   #Número de pixeles de separación entre elementos sobre el eje y
 estados, transiciones = (1, 2)
 entradas = []
 text_var = []
@@ -97,22 +98,64 @@ def minimizar():
     #print(automata)    
 
 
-#Formato de la ventana
+
+# Formato de la ventana ________________________________________________________________________________________________________________________________
 #El siguiente pedazo de código es feo como pegarle a un bebé y por las premuras del tiempo no podremos hacerlo más estético, pero funciona (espero)
 window = Tk()
-window.title("Minimizacion de automatas")
+window.title("Minimización de Automatas")
 window.geometry("600x400")  #Anchura x altura
 window.resizable(False, False)
-etiqueta_encabezado = Label(text="Programa que minimiza automatas finitos deterministas y no deterministas")
-etiqueta_encabezado.pack()
-etiqueta_indicaciones = Label(text="Favor de indicar el automata a minimizar, solamente se aceptan automatas que reconocen el alfabeto {0, 1}")
-etiqueta_indicaciones.pack()
+
+etiqueta_encabezado = Label(font='Helvetica 13 bold', text=
+'''Minimizador de Automatas
+finitos deterministas (AFD)
+y no detemrinistas (AFND)''')
+etiqueta_encabezado.place(x=40, y=50)
+#etiqueta_encabezado.pack()
+
+etiqueta_indicaciones = Label(font='Helvetica 10', text=
+'''Sólamente se aceptan autómatas
+que reconocen el alfabeto {0,1}''')
+etiqueta_indicaciones.place(x=40, y=110)
+#etiqueta_indicaciones.pack()
+
+
+etiqueta_inicial = Label(text="E. Inicial")
+etiqueta_inicial.place(x=40, y=170)
+entrada_inicial = Entry(window, textvariable=StringVar(), width=7)
+entrada_inicial.place(x=40, y=200)
+
+etiqueta_final = Label(text="E. Final")
+etiqueta_final.place(x=130, y=170)
+entrada_final = Entry(window, textvariable=StringVar(), width=7)
+entrada_final.place(x=130, y=200)
+
+
+#window.create_line(0, 0, 300, 300)
+
+
+# Inputs _________________________________________________________________________________________________________________________________________________
+
+'''
+my_frame = Frame(window)
+my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
+my_listbox = Listbox(my_frame, width=50, height=50, yscrollcommand=my_scrollbar.set)
+#my_scrollbar.place(x=50, y=50)
+#my_scrollbar.config(command=my_listbox.yview)
+my_scrollbar.pack(side=RIGHT, fill=Y)
+my_frame.pack()
+'''
+
+
 etiqueta_0 = Label(text="0")
 etiqueta_0.place(x=eje_x, y=eje_y)
+
 etiqueta_1 = Label(text="1")
 etiqueta_1.place(x=eje_x+separacion_x, y=eje_y)
+
 etiqueta_A = Label(text="A")
 etiqueta_A.place(x=eje_x-separacion_x+30, y=eje_y+separacion_y)
+
 entradas.append([]) #Entradas A
 text_var.append([]) #Valores A
 text_var[0].append(StringVar())
@@ -122,20 +165,23 @@ text_var[0].append(StringVar())
 entradas[0].append(Entry(window, textvariable=text_var[0][1], width=7))
 entradas[0][1].place(x=eje_x+separacion_x, y=eje_y+separacion_y)
 eje_y = eje_y + (separacion_y*2)
-boton_crear_estado = Button(window, text="Añadir estado", width=15, command=nuevo_estado)
-boton_crear_estado.place(x=100, y=350)
-boton_epsilon = Button(window, text="Añadir epsilon", width=15, command=agregar_epsilon)
-boton_epsilon.place(x=250, y=350)
-boton_minimizar = Button(window, text="Minimizar", width=15, command=minimizar)
-boton_minimizar.place(x=400, y=350)
-etiqueta_inicial = Label(text="Inicial")
-etiqueta_inicial.place(x=400, y=200)
-entrada_inicial = Entry(window, textvariable=StringVar(), width=7)
-entrada_inicial.place(x=450, y=200)
-etiqueta_final = Label(text="Final")
-etiqueta_final.place(x=400, y=250)
-entrada_final = Entry(window, textvariable=StringVar(), width=7)
-entrada_final.place(x=450, y=250)
+
+
+
+# Botones ______________________________________________________________________________________________________________________________________________
+
+boton_crear_estado = Button(window, text="Añadir Estado", width=15, command=nuevo_estado)
+boton_crear_estado.place(x=40, y=255)
+
+boton_epsilon = Button(window, text="Añadir Epsilon", width=15, command=agregar_epsilon)
+boton_epsilon.place(x=40, y=285)
+
+
+boton_minimizar = Button(window, text="Minimizar", width=15, command=minimizar, bg="lightgreen")
+boton_minimizar.place(x=40, y=330)
+
+
+
 """
 #my_window = MainWindow(window)
 window.etiqueta_0 = Label(text="0")
