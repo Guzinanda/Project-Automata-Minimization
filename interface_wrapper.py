@@ -35,7 +35,8 @@ automata = {}   #Automata de entrada
 estados_nombres = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 ya_epsilon = 0
 automata_minimizado = {}
-
+finales = []
+estado_inicial = ""
 
 def nuevo_estado():
     global estados
@@ -78,6 +79,8 @@ def agregar_epsilon():
 def minimizar():    
     global automata   
     global automata_minimizado
+    global finales
+    global estado_inicial
 
     estado_inicial = entrada_inicial.get()
     estado_final = entrada_final.get() 
@@ -101,22 +104,25 @@ def minimizar():
         automata_sin_epsilon = afn_epsilon_afn.remover_epsilon(automata)
         print(automata_sin_epsilon)
         automata_formateado = afn_to_afd.encontrar_transiciones(automata_sin_epsilon, estado_inicial, estado_final)
-        automata_minimizado = afd_minimization.minimizer(automata_formateado, list(estado_final))
+        automata_minimizado, finales = afd_minimization.minimizer(automata_formateado, list(estado_final))
     else: 
         print('\n')
         print("Automata sin transiciones epsilon: \n")
         automata_formateado = afn_to_afd.encontrar_transiciones(automata, estado_inicial, estado_final)
-        automata_minimizado = afd_minimization.minimizer(automata_formateado, list(estado_final))
+        automata_minimizado, finales = afd_minimization.minimizer(automata_formateado, list(estado_final))
 
     
     print('\n')
     print("AUTOMATA MINIMIZADO: \n", automata_minimizado)
+    print("FINALES:\n", finales)
     #print(automata)   
 
     print('\n') 
 
 def result():
     global automata_minimizado
+    global finales
+    global estado_inicial
 
     newwindow = Tk()
     newwindow.title("Minimización")
@@ -133,8 +139,12 @@ def result():
 
     t = Text(newwindow, width = 15, height = 15, wrap = NONE, xscrollcommand = h.set, yscrollcommand = v.set) 
 
-    t.insert(END,"AUTOMATA INICIAL: \n")
-
+    t.insert(END,"ESTADO INICIAL: ")
+    t.insert(END, estado_inicial)
+    t.insert(END, "\n")
+    t.insert(END, "ESTADOS FINALES: ")
+    t.insert(END, finales)
+    t.insert(END, "\n")
     t.insert(END,"AUTOMATA MINIMIZADO: \n")
 
     # Creamos str para agregar a la caja de texto:

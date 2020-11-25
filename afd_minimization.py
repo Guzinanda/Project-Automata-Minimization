@@ -201,11 +201,21 @@ def minimizer(automata, estados_aceptacion):
                 automata_minimizado[formato_combinacion]['1'] = ''.join(estados)
                 #print("Automata: ", automata_minimizado)        
                 break
+
+    #Calcular estados de aceptacion
+    nuevos_estados_aceptacion = []
+    for estados in automata.keys():
+        new_list = list(estados)
+        print(new_list)
+        for item in estados_aceptacion:
+            if item in new_list: nuevos_estados_aceptacion.append(estados)
     
     #keys_finales = automata_minimizado.keys()
     print(len(automata_minimizado.keys()))
-    if len(automata_minimizado.keys()) == 1: return automata
-    else: return automata_minimizado
+    if len(automata_minimizado.keys()) == 1: 
+        return automata, nuevos_estados_aceptacion
+    else: 
+        return automata_minimizado, nuevos_estados_aceptacion
 
     #print("Automata minimizado\n", automata_minimizado)
     #print("\n")
