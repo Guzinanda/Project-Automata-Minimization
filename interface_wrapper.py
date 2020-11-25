@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 
+import tkinter.scrolledtext as tkst
+
 import afn_to_afd
 import afn_epsilon_afn
 import afd_minimization
@@ -18,7 +20,8 @@ class MainWindow:
         self.etiqueta_indicaciones.pack()
 """
 
-# Definición de variables ______________________________________________________________________________________________________________________________________________
+#? Definición de variables ______________________________________________________________________________________________________________________________________________
+
 eje_x = 330 #Valor inicial en x (Donde se imprime el 0 del encabezado)
 eje_y = 75  #Valor inicial en y (Donde se imprime el 0 del encabezado)
 
@@ -31,6 +34,8 @@ text_var = []
 automata = {}   #Automata de entrada
 estados_nombres = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 ya_epsilon = 0
+automata_minimizado = {}
+
 
 def nuevo_estado():
     global estados
@@ -71,9 +76,12 @@ def agregar_epsilon():
             eje_y_inicial = eje_y_inicial+separacion_y
 
 def minimizar():    
-    global automata       
+    global automata   
+    global automata_minimizado
+
     estado_inicial = entrada_inicial.get()
-    estado_final = entrada_final.get()        
+    estado_final = entrada_final.get() 
+
     for estado in range(estados):
         automata[estados_nombres[estado]] = {}
         automata[estados_nombres[estado]]['0'] = list(text_var[estado][0].get())
@@ -83,23 +91,75 @@ def minimizar():
         if ya_epsilon: 
             automata[estados_nombres[estado]]['Eps'] = list(text_var[estado][2].get())
             if automata[estados_nombres[estado]]['Eps'] == []: automata[estados_nombres[estado]]['Eps'] = list('N')    
-    print("[DBG]AUTOMATA INICIAL: \n", automata)
+    
+    print('\n')
+    print("AUTOMATA INICIAL: \n", automata)
     if ya_epsilon == 1: 
-        print("Automata con transiciones epsilon\n")
+        
+        print('\n')
+        print("Automata con transiciones epsilon: \n")
         automata_sin_epsilon = afn_epsilon_afn.remover_epsilon(automata)
         print(automata_sin_epsilon)
         automata_formateado = afn_to_afd.encontrar_transiciones(automata_sin_epsilon, estado_inicial, estado_final)
         automata_minimizado = afd_minimization.minimizer(automata_formateado, list(estado_final))
     else: 
-        print("Automata sin transiciones epsilon\n")
+        print('\n')
+        print("Automata sin transiciones epsilon: \n")
         automata_formateado = afn_to_afd.encontrar_transiciones(automata, estado_inicial, estado_final)
         automata_minimizado = afd_minimization.minimizer(automata_formateado, list(estado_final))
-    print(automata_minimizado)
-    #print(automata)    
+
+    
+    print('\n')
+    print("AUTOMATA MINIMIZADO: \n", automata_minimizado)
+    #print(automata)   
+
+    print('\n') 
+
+def result():
+    global automata_minimizado
+
+    newwindow = Tk()
+    newwindow.title("Minimización")
+    newwindow.geometry("600x200")  #Anchura x altura
+    newwindow.resizable(False, False)
+
+    h = Scrollbar(newwindow, orient='vertical')
+    h.pack(side = BOTTOM, fill = X) 
+    v = Scrollbar(newwindow)
+    v.pack(side = RIGHT, fill = Y)
+
+    # Procesa la infromacion para crear automata minimizado:
+    minimizar()
+
+    t = Text(newwindow, width = 15, height = 15, wrap = NONE, xscrollcommand = h.set, yscrollcommand = v.set) 
+
+    t.insert(END,"AUTOMATA INICIAL: \n")
+
+    t.insert(END,"AUTOMATA MINIMIZADO: \n")
+
+    # Creamos str para agregar a la caja de texto:
+    for estados in automata_minimizado.keys():
+        cadena = estados + ':{ '
+        for transiciones in automata_minimizado[estados].keys():
+            cadena = cadena + transiciones + ':' + automata_minimizado[estados][transiciones] + ' '
+        cadena = cadena + "} \n"
+        t.insert(END, cadena)
+    
+    
+
+    t.pack(side=TOP, fill=X) 
+    h.config(command=t.xview) 
+    v.config(command=t.yview) 
+    newwindow.mainloop() 
+
+
+#def cerrar_ventana():
+#    newwindow.destroy()
 
 
 
-# Formato de la ventana ________________________________________________________________________________________________________________________________
+#? Formato de la ventana ________________________________________________________________________________________________________________________________
+
 #El siguiente pedazo de código es feo como pegarle a un bebé y por las premuras del tiempo no podremos hacerlo más estético, pero funciona (espero)
 window = Tk()
 window.title("Minimización de Automatas")
@@ -131,21 +191,8 @@ entrada_final = Entry(window, textvariable=StringVar(), width=7)
 entrada_final.place(x=130, y=200)
 
 
-#window.create_line(0, 0, 300, 300)
 
-
-# Inputs _________________________________________________________________________________________________________________________________________________
-
-'''
-my_frame = Frame(window)
-my_scrollbar = Scrollbar(my_frame, orient=VERTICAL)
-my_listbox = Listbox(my_frame, width=50, height=50, yscrollcommand=my_scrollbar.set)
-#my_scrollbar.place(x=50, y=50)
-#my_scrollbar.config(command=my_listbox.yview)
-my_scrollbar.pack(side=RIGHT, fill=Y)
-my_frame.pack()
-'''
-
+#? Inputs _________________________________________________________________________________________________________________________________________________
 
 etiqueta_0 = Label(text="0")
 etiqueta_0.place(x=eje_x, y=eje_y)
@@ -168,7 +215,7 @@ eje_y = eje_y + (separacion_y*2)
 
 
 
-# Botones ______________________________________________________________________________________________________________________________________________
+#? Botones ______________________________________________________________________________________________________________________________________________
 
 boton_crear_estado = Button(window, text="Añadir Estado", width=15, command=nuevo_estado)
 boton_crear_estado.place(x=40, y=255)
@@ -176,15 +223,10 @@ boton_crear_estado.place(x=40, y=255)
 boton_epsilon = Button(window, text="Añadir Epsilon", width=15, command=agregar_epsilon)
 boton_epsilon.place(x=40, y=285)
 
-
-boton_minimizar = Button(window, text="Minimizar", width=15, command=minimizar, bg="lightgreen")
+boton_minimizar = Button(window, text="Minimizar", width=15, command=result)
 boton_minimizar.place(x=40, y=330)
 
 
+#? Fin _________________________________________________________________________________________________________________________________________________
 
-"""
-#my_window = MainWindow(window)
-window.etiqueta_0 = Label(text="0")
-window.etiqueta_0.pack()
-"""
 window.mainloop()
