@@ -165,7 +165,11 @@ def encontrar_transiciones(nfa, estado_inicial, estado_final):
                      else:
                             no_terminado = False
 
+       print(dfa)
+
        dfa_formateado = formatear.formatear_output(dfa)
+
+       print(dfa_formateado)
 
        return dfa_formateado
 
